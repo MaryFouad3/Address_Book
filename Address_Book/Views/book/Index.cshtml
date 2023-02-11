@@ -1,0 +1,79 @@
+﻿
+@model List<Book>
+@{
+    Layout = "_Layout";
+}
+
+    <table class="table table-bordered table-hover" width="50%">
+     <tr>
+        <th>
+             id
+        </th>
+        <th>
+            FullName
+        </th>
+        <th>
+            JobTitle
+        </th>
+        <th>
+            DepartmentName
+        </th>
+        <th>
+            MobileNo
+        </th>
+        <th>
+            HomeTelNo
+        </th>
+         <th>
+            Dateofbirth
+        </th>
+         <th>
+            Address
+        </th>
+         <th>
+            Email
+        </th>
+        <th>
+            Photo
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.id</td>
+            <td>@item.FullName</td>
+            <td>@item.Job_id</td>
+            <td>@item.Dept_id</td>
+            <td>@item.MobileNo</td>
+            <td>@item.HomeTelNo</td>
+            <td>@item.Dateofbirth</td>
+            <td>@item.Address</td>
+            <td>@item.Email</td>
+            <td>
+
+                @if (item.Photo is not null)
+                {
+                <img class="rounded-circle" alt="@(item.FullName)-Photo" src="data:image/*;base64,@(Convert.ToBase64String(item.Photo))" style="width:50px;height:50px;object-fit:cover;"/>
+                }
+                else
+                {
+                    <img class="rounded-circle" src="/images/@item.Photo" style="width:50px;height:50px;object-fit:cover;" />
+                }
+            </td>
+            <td> <a asp-action="edit" asp-controller="Book" asp-route-id="@item.id" class="btn btn-warning">Edit</a></td>
+            <td><a asp-action="delete" onclick="confirmDelete()" class="btn btn-danger" asp-route-id="@item.id">Delete</a></td>
+           
+        </tr>
+    }
+    </table>
+
+    <a href="/Book/add"><input  type="button" value="add" class="btn mt-2 btn-primary" /></a>
+
+    <script>
+    function confirmDelete() 
+    {
+        let message = confirm("Are You Sure?");
+        if(message == false)
+            event.preventDefault();
+    }
+    </script>

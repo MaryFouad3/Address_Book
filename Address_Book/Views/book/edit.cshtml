@@ -1,0 +1,65 @@
+﻿@model Book
+@{
+    SelectList Jobtitles = new SelectList((List<Job>)ViewBag.Jobs, "Id", "Name");
+    SelectList Depts = new SelectList((List<Department>)ViewBag.Depts, "Id", "Name");
+}
+<form method="post" asp-action="saveEdit" asp-controller="Book" asp-route-id="@Model.id" enctype="multipart/form-data">
+   <input asp-for="id" type="hidden" class="form-control"/>
+    <div>
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" class="form-control"/>
+        <span class="text-danger" asp-validation-for="FullName"></span>
+    </div>
+    <div>
+        <label asp-for="JobTitle"></label>
+        <select asp-for="JobTitle" asp-items="Jobtitles" class="form-control" >
+        </select>
+        <span class="text-danger" asp-validation-for="JobTitle"></span>
+    </div>
+    <div>
+        <label asp-for="DepartmentName"></label>
+        <select asp-for="DepartmentName" asp-items="Depts" class="form-control" >
+        </select>
+        <span class="text-danger" asp-validation-for="DepartmentName"></span>
+    </div>
+    <div>
+        <label asp-for="MobileNo"></label>
+        <input  asp-for="MobileNo" class="form-control"/>
+        <span class="text-danger" asp-validation-for="MobileNo"></span>
+    </div>
+    <div>
+        <label asp-for="HomeTelNo"></label>
+        <input  asp-for="HomeTelNo" class="form-control"/>
+        <span class="text-danger" asp-validation-for="HomeTelNo"></span>
+    </div>
+    <div>
+        <label asp-for="Dateofbirth"></label>
+        <input  asp-for="Dateofbirth" class="form-control"/>
+        <span class="text-danger" asp-validation-for="Dateofbirth"></span>
+    </div>
+    <div>
+        <label asp-for="Address"></label>
+        <input  asp-for="Address" class="form-control"/>
+        <span class="text-danger" asp-validation-for="Address"></span>
+    </div>
+    <div>
+        <label asp-for="Email"></label>
+        <input  asp-for="Email" class="form-control"/>
+        <span class="text-danger" asp-validation-for="Email"></span>
+    </div>
+     <div>
+        <label asp-for="Photo"></label>
+        <input asp-for="Photo" type="file" class="form-control" />
+        <span class="text-danger" asp-validation-for="Photo"></span>
+    </div>
+    <input type="submit" value="add" class="btn mt-2 btn-success" />
+    <a href="/Book/Index"><input  type="button" value="back to list" class="btn mt-2 btn-primary" /></a>
+</form>
+<br />
+
+@section Scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js">
+    </script>
+}
+
