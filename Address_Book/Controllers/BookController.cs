@@ -1,5 +1,6 @@
 ﻿using Address_Book.Models;
 using Address_Book.services;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -23,10 +24,61 @@ namespace Address_Book.Controllers
             DeptRepository = _deptRepository;
         }
    
-        public IActionResult Index()
+        public IActionResult Index(string SearchText = "")
+        {
+            List<Book> bookModel;
+            if(SearchText != "" && SearchText != null)
+            {
+                bookModel = BookService.getAll()
+                    .Where(b => b.FullName.Contains(SearchText)
+                    || b.Address.Contains(SearchText) 
+                    || b.Email.Contains(SearchText)).ToList();
+
+            }
+            else
+            bookModel = BookService.getAll();
+            return View("Index",bookModel);
+        }
+
+        public IActionResult ExportToExcel()
         {
             List<Book> bookModel = BookService.getAll();
-            return View("Index",bookModel);
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet=workbook.Worksheets.Add("bookModel");
+                var currentRow = 1;
+                worksheet.Cell(currentRow, 1).Value = "id";
+                worksheet.Cell(currentRow, 2).Value = "FullName";
+                worksheet.Cell(currentRow, 3).Value = "JobTitle";
+                worksheet.Cell(currentRow, 4).Value = "DepartmentName";
+                worksheet.Cell(currentRow, 5).Value = "MobileNo";
+                worksheet.Cell(currentRow, 6).Value = "HomeTelNo";
+                worksheet.Cell(currentRow, 7).Value = "Dateofbirth";
+                worksheet.Cell(currentRow, 8).Value = "Address";
+                worksheet.Cell(currentRow, 9).Value = "Email";
+
+                foreach (var book in bookModel)
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = book.id;
+                    worksheet.Cell(currentRow, 2).Value = book.FullName;
+                    worksheet.Cell(currentRow, 3).Value = book.JobTitle;
+                    worksheet.Cell(currentRow, 4).Value = book.DepartmentName;
+                    worksheet.Cell(currentRow, 5).Value = book.MobileNo;
+                    worksheet.Cell(currentRow, 6).Value = book.HomeTelNo;
+                    worksheet.Cell(currentRow, 7).Value = book.Dateofbirth;
+                    worksheet.Cell(currentRow, 8).Value = book.Address;
+                    worksheet.Cell(currentRow, 9).Value = book.Email;
+                  
+                }
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "bookModel.xlsx");
+                }
+
+            }
         }
         public IActionResult add()
         {

@@ -31,7 +31,7 @@ namespace Address_Book
                 c.IOTimeout = TimeSpan.FromMinutes(30);
             });
             services.AddDbContext<BookEntities>(options => options.UseSqlServer
-            (@"Data Source=.;Initial Catalog=AddressBook;Integrated Security=True"));
+            (Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IJobRepository, JobRepository>();
             services.AddScoped<IDeptRepository, DeptRepository>();
